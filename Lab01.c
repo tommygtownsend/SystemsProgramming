@@ -8,7 +8,7 @@ int main(int argc, char* argv[])
     scanf("%d",&given_number);
     if (given_number <= 1)
     printf("%d is prime");
-     
+    
     return 0;  
 
 }
