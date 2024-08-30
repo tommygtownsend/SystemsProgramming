@@ -13,7 +13,6 @@ int main(int argc, char* argv[])
     printf("Give me a number: ");
     scanf("%d", &given_number); 
 
-
     //if then section to determine if given_number is prime, with a for-loop
     if (given_number <= 1) {
         printf("%d is not prime.\n", given_number);
