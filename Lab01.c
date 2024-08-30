@@ -3,12 +3,18 @@
 
 int main(int argc, char* argv[])
 {  
-    int i;
+
+    //welcome to ye old variables shop. Feel free to peruse!
+    int i;                          
     int primeflag = 0;
     int given_number;
-    printf("Give me a number: ");
-    scanf("%d", &given_number);
 
+    //Printin'n'Scannin'
+    printf("Give me a number: ");
+    scanf("%d", &given_number); 
+
+
+    //if then section to determine if given_number is prime, with a for-loop
     if (given_number <= 1) {
         printf("%d is not prime.\n", given_number);
         primeflag = 1; 
@@ -27,5 +33,6 @@ int main(int argc, char* argv[])
     if (primeflag == 0){
         printf("%d IS Prime\n",given_number);
     }
+    //to kill the main function you return 0
     return 0;  
 }
