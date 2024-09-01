@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <math.h>
-
-int main(int argc, char* argv[])//I kept the paramters the same as our hello world on Thursday.
+//to compile: in the terminal enter gcc -o Lab01 Lab01.c, then ./Lab01 (codespaces)
+int main(int argc, char* argv[])//I kept the parameters the same as our hello world on Thursday.
 
 {  
     int a = 1;
