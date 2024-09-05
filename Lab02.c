@@ -12,7 +12,7 @@ int n;
 int arr[n];
 
  // Read array elements from user
-    printf("Enter %d elements:\n", n);
+    printf("Enter %d elements:\n", n); //print(thing you're printing with variable specifier, variable)
     for (int i = 0; i < n; i++) {
         scanf("%d", &arr[i]);
     }
@@ -31,17 +31,14 @@ int arr[n];
     }
 
 
-
-
-
  printf("Sorted array:\n");
  int i2;
     for (i2 = 0; i2 < n; i2++) {
-        printf("%d ", arr[i2]);
+        printf("Index# [%d] :",i2);
+        printf(" %d ", arr[i2]);
         printf("\n");
     }
-    printf("\n");
-
+    //printf("\n");
 
 return 0;
 
