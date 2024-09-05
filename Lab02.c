@@ -30,9 +30,9 @@ int arr[n];
         arr[j + 1] = key;
     }
 
- int i;
-    for (i = 0; i < n; i++) {
-        printf("%d ", arr[i]);
+ int i2;
+    for (i2 = 0; i2 < n; i2++) {
+        printf("%d ", arr[i2]);
     }
     printf("\n");
 
