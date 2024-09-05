@@ -40,7 +40,7 @@ int arr[n];
  printf("Sorted array:\n");
 
 
-return;
+return 0;
 
 }
 
