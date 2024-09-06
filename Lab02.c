@@ -1,22 +1,24 @@
 #include <stdio.h>
 #include <math.h>
 
-int main(int argc, char* argv[])//I kept the parameters the same as our hello world on Thursday.
+int main(int argc, char* argv[])//I kept the parameters the same as our hello world on our first lab.
 {
 int n;
 
- printf("Enter the number of elements in the array: ");
-    scanf("%d", &n);
+printf("Enter the number of elements in the array: ");
+scanf("%d", &n);//taking in as int, storing in n
 
 //declare the array with specified size 
-int arr[n];
+int arr[n]; //the array gets n values, each having 4 bytes
 
  // Read array elements from user
     printf("Enter %d elements:\n", n); //print(thing you're printing with variable specifier, variable)
     for (int i = 0; i < n; i++) {
-        scanf("%d", &arr[i]);
+        scanf("%d", &arr[i]); //scanning as int, storing in the current spot of the arr
     }
 
+
+//start of insertion sort 
  int i, key, j;
     for (i = 1; i < n; i++) {
         key = arr[i]; //key is the current value of array
@@ -30,7 +32,7 @@ int arr[n];
         arr[j + 1] = key; //new key value
     }
 
-
+//finally we print the sorted array
  printf("Sorted array:\n");
  int i2;
     for (i2 = 0; i2 < n; i2++) {
@@ -40,7 +42,7 @@ int arr[n];
     }
     //printf("\n");
 
-return 0;
+return 0; //return 0 to kill the program
 
 }
 
