@@ -14,7 +14,7 @@ int arr[n]; //the array gets n values, each having 4 bytes
  // Read array elements from user
     printf("Enter %d elements:\n", n); //print(thing you're printing with variable specifier, variable)
     for (int i = 0; i < n; i++) {
-        scanf("%d", &arr[i]); //scanning as int, storing in the current spot of the arr
+        scanf("%d", &arr[i]); //scanning as int, storing in the current memory location of the arr
     }
 
 
