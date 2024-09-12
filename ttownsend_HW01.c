@@ -40,10 +40,6 @@ if (n >= 1){
     }
 }
 
-   
-
-
-
 int main(){
 int n;
 
