@@ -64,7 +64,7 @@ int main() {
     printf("Sorted array:\n");
     displayArray(arr, n);
 
-    // We should be in the habit of freeing up our memory, else we could get a memory leak (exaple being any game made in unity)
+    // We should be in the habit of freeing up our memory, else we could get a memory leak (example being any game made in unity)
     for (int i = 0; i < n; i++) {
         free(arr[i]);  // Free the memory allocated for each string
     }
