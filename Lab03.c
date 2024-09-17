@@ -20,7 +20,7 @@ void sortArray(char **arr, int size) {
         while (j >= 0 && strcmp(arr[j], key) > 0) {  // Compare and shift elements
         //https://www.w3schools.com/c/ref_string_strcmp.php#:~:text=Definition%20and%20Usage,a%20string%20has%20been%20reached.
             arr[j + 1] = arr[j];  // Move string arr[j] to the next position
-            j--;  // Move left in the array
+            j--;  // Move left
         }
         arr[j + 1] = key;  // Insert the key at its correct position
         //the values are swapped this way
@@ -41,13 +41,13 @@ void readStrings(char **arr, int size) {
 }
 
 int main() {
-    int N;  // Variable to store the number of strings
+    int n;  
     printf("Enter the number of strings: ");  
-    scanf("%d", &N);  // Int, N, Read the number of strings from user input
+    scanf("%d", &n);  // Int, N, Read the number of strings from user input
 
     // Allocate memory for an array of string pointers
     // I am still not entirely comfortable with malloc, and have a lot of questions on the pointers for thursday
-    char **arr = (char **)malloc(N * sizeof(char *));//I'm allocating the size of a single character in my array times the total number of elements I want
+    char **arr = (char **)malloc(n * sizeof(char *));//I'm allocating the size of a single character in my array times the total number of elements I want
     if (arr == NULL) {  // Check if memory allocation failed
         fprintf(stderr, "Memory allocation failed\n");  // Print error message to stderr https://stackoverflow.com/questions/3385201/confused-about-stdin-stdout-and-stderr
         //used when handling errors !
@@ -55,17 +55,17 @@ int main() {
     }
 
     // Read strings
-    readStrings(arr, N);
+    readStrings(arr, n);
 
     // Then Sort the array of strings
-    sortArray(arr, N);
+    sortArray(arr, n);
 
     // Finally Display the sorted array of strings
     printf("Sorted array:\n");
-    displayArray(arr, N);
+    displayArray(arr, n);
 
     // We should be in the habit of freeing up our memory, else we could get a memory leak (exaple being any game made in unity)
-    for (int i = 0; i < N; i++) {
+    for (int i = 0; i < n; i++) {
         free(arr[i]);  // Free the memory allocated for each string
     }
     free(arr);  // Free the memory allocated for the array of string pointers
