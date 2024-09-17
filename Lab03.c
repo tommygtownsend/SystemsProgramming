@@ -1,7 +1,8 @@
 #include <stdio.h>    
 #include <stdlib.h>   
 #include <string.h>   
-
+// To compile: "gcc -o Lab03 Lab03.c"
+//To run: "./Lab03"
 // display the array of strings
 void displayArray(char **arr, int size) {
     printf("[\n");  // Print opening bracket for the array display
