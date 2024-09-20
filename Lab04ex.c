@@ -18,19 +18,9 @@ if (argc != 3){
 }
 
 readFileDescriptor = open(argv[2], O_RDONLY);
-writeFileDescriptor = open(argv[1], O_CREAT|O_WRONLY|O_TRUNC, 0700);
+writeFileDescriptor = open(argv[1], O_CREAT|O_WRONLY| O_APPEND, 0700);
 
-/*
-Use the open function in read only mode to read the input file. The open function
-takes the name of the file as the first argument and the open flag as the second
-argument. The open flag specifies if the file should be opened in read only mode
-(O_RDONLY), write only mode (O_WRONLY), or read-write mode (O_RDWR). There is
-an optional third argument that specifies the file permissions called mode, we will not
-use the optional third argument here. The third argument specifies the file permissions
-of the new file created for writing. Note that the UNIX file uses {read, write, execute}
-(rwx) permissions for the user, group, and everyone. You can find out various modes
-supported by the open function from the man page or the text book.
-*/
+
 if (readFileDescriptor == -1 || writeFileDescriptor == -1){
     printf("Error with file open\n");
     exit (-1);
