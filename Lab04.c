@@ -1,6 +1,12 @@
 /*This one was harder than the others for me to wrap my head around. 
 The open() command makes more sense, and I'm starting to get more comfortable
-with always thinking of my data as just a stream of characters!*/
+with always thinking of my data as just a stream of characters!
+
+To compile: "gcc -o Lab04 Lab04.c"
+To run: "./Lab04 file1.txt file2.txt"
+To open file(s): "cat file1.txt"
+
+*/
 
 #include <stdio.h>//our standard input and out put library
 #include <stdlib.h>//we need this library for exit 
