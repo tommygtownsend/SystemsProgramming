@@ -54,4 +54,5 @@ int main(int argc, char **argv) {
     return 0;
 }
 //this one was very difficult to implement! I am reading a lot more files in the directory than I expected. Upon more reading these extra files are a lot of data git stores to keep up with the edits, metadata, pushes, pulls, compiles, ect. All hidden  
+//staging commits then rerunning yeilded more files in my list
 //I hope it was ok to include all these extra files, as i could not figure out how to not include them. I should have started way earlier but life got in the way as it sometime does.
