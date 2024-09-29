@@ -1,16 +1,20 @@
+//To compile: "gcc -o Lab05ttownsen Lab05ttownsen.c"
+//To run: "./Lab05ttownsen ."
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <dirent.h>
-#include <string.h>
-#include <sys/stat.h>
+#include <string.h>//https://manpages.ubuntu.com/manpages/trusty/man7/string.h.7posix.html
+#include <sys/stat.h>//https://man7.org/linux/man-pages/man0/sys_stat.h.0p.html
 
 void travdir(const char *dirname, int *count) {//returns nothing, takes in a string for the directory name and a pointer to an integer representing the number of files printed
-    struct dirent *dirent;//pointer to a dirent structure which represents the deirectory we will read later
+    struct dirent *dirent;//pointer to a structure which represents the directory we will read later
     DIR *parentDir = opendir(dirname);//attempts to open the directory dirname if it works will point to the paerant directory. if it falis it will set to null
 
     if (parentDir == NULL) {//If the parent directory is null
         printf("Error opening directory '%s'\n", dirname);//error message that the dir was null
-        return;
+        return;//exits
     }
 
     while ((dirent = readdir(parentDir)) != NULL) {//If there are directories to read..
@@ -30,8 +34,8 @@ void travdir(const char *dirname, int *count) {//returns nothing, takes in a str
             // Check if the entry is a directory
             struct stat path_stat;//a struct called path_stat 
             stat(path, &path_stat);//takes info from a file at path and stores in stat_path
-            if (S_ISDIR(path_stat.st_mode)) {//S_ISDIR check if directory. If it is, then 
-                // Recursively traverse the subdirectory
+            
+            if (S_ISDIR(path_stat.st_mode)) {//S_ISDIR check if directory.
                 travdir(path, count);//If its a directroy we recursivley call travdir again!
             }
         }
@@ -46,6 +50,8 @@ int main(int argc, char **argv) {
     }
 
     int count = 1;
-    travdir(argv[1], &count);
+    travdir(argv[1], &count);//again, travdir takes in the directory specified when running the program, as well as the mem location for the file counter
     return 0;
 }
+//this one was very difficult to implement! I am reading a lot more files in the directory than I expected. Upon more reading these extra files are a lot of data git stores to keep up with the edits, metadata, pushes, pulls, compiles, ect. All hidden  
+//I hope it was ok to include all these extra files, as i could not figure out how to not include them. I should have started way earlier but life got in the way as it sometime does.
