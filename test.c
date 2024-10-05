@@ -73,4 +73,5 @@ int main(int argc, char **argv) {
     }
     free(file_entries);
     return EXIT_SUCCESS;
+
 }
