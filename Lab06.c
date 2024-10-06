@@ -8,7 +8,7 @@
 
 // Define a structure called 'listing' to hold the data for each item
 struct listing {
-    int id;  // Unique identifier for the listing
+    int id;  // Identifier for the listing
     int host_id;  // Identifier for the host of the listing
     char *host_name;  // Name of the host (dynamically allocated string)
     char *neighbourhood_group;  // Group of the neighbourhood (dynamically allocated string)
@@ -25,11 +25,11 @@ struct listing {
 
 // Function to parse a line of CSV data into a 'listing' structure
 struct listing getfields(char* line) {
-    struct listing item;  // Create an instance of 'listing'
-    char *token;  // Pointer to hold the tokens while parsing
+    struct listing item;  // Create an instance of 'listing', it's easy when you think of OOP
+    char *token;  // Pointer for each token, which will be the "cell" we are in
 
     // Use strtok to split the line by commas
-    token = strtok(line, ",");
+    token = strtok(line, ",");//https://man7.org/linux/man-pages/man3/strtok.3.html
     item.id = atoi(token);  // Convert token to integer and assign to id
     
     token = strtok(NULL, ",");
