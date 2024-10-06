@@ -22,11 +22,11 @@ typedef struct {
 } FileEntry;
 
 // Function to print file information
-void print_file_info(const char *file_name, struct stat *file_stat, int show_size) {
+void print_file_info(const char *file_name, struct stat *file_stat, int show_size, int depth) {
     if (show_size) {
-        printf("%s (%ld bytes)", file_name, file_stat->st_size);
+        printf("%*s%s (%ld bytes)\n", depth * 4, "", file_name, file_stat->st_size);
     } else {
-        printf("%s", file_name);
+        printf("%*s%s\n", depth * 4, "", file_name);
     }
 }
 
@@ -39,42 +39,42 @@ int compare_files(const void *a, const void *b) {
 
 // Function to recursively traverse directories
 void traverse(const char *dir_name, int depth, int show_size, off_t min_size, const char *filter, int reverse_sort) {
-    DIR *dir = opendir(dir_name); // Open the directory
+    DIR *dir = opendir(dir_name); // Open the directory (https://man7.org/linux/man-pages/man3/opendir.3.html)
     if (!dir) {
         perror("opendir");
         return;
     }
 
-    struct dirent *entry;
-    struct stat file_stat;
-    char path[1024];
+    struct dirent *entry; // Directory entry (https://man7.org/linux/man-pages/man struct dirent.7.html)
+    struct stat file_stat; // File status structure (https://man7.org/linux/man-pages/man2/stat.2.html)
+    char path[1024]; // Buffer for full path
 
     // Collect files in an array to sort them later if needed
     FileEntry files[MAX_FILES];
     int file_count = 0;
 
-    while ((entry = readdir(dir)) != NULL) {
+    while ((entry = readdir(dir)) != NULL) { // Read directory entries (https://man7.org/linux/man-pages/man3/readdir.3.html)
         if (entry->d_name[0] == '.') continue; // Skip hidden files
 
-        snprintf(path, sizeof(path), "%s/%s", dir_name, entry->d_name); // Create full path
-        lstat(path, &file_stat); // Get file status
+        snprintf(path, sizeof(path), "%s/%s", dir_name, entry->d_name); // Create full path (https://man7.org/linux/man-pages/man3/snprintf.3.html)
+        lstat(path, &file_stat); // Get file status (https://man7.org/linux/man-pages/man2/lstat.2.html)
 
         // Check if it matches the filter
-        if (filter && strstr(entry->d_name, filter) == NULL) continue; // Check for substring
+        if (filter && strstr(entry->d_name, filter) == NULL) continue; // Check for substring (https://man7.org/linux/man-pages/man3/strstr.3.html)
 
         // Check size filtering
         if (file_stat.st_size < min_size) continue;
 
         // Add to files array
-        files[file_count].name = strdup(entry->d_name); // Duplicate the file name
+        files[file_count].name = strdup(entry->d_name); // Duplicate the file name (https://man7.org/linux/man-pages/man3/strdup.3.html)
         files[file_count].size = file_stat.st_size;
         file_count++;
     }
 
-    closedir(dir); // Close the directory
+    closedir(dir); // Close the directory (https://man7.org/linux/man-pages/man3/closedir.3.html)
 
     // Sort files
-    qsort(files, file_count, sizeof(FileEntry), compare_files);
+    qsort(files, file_count, sizeof(FileEntry), compare_files); // Sort the files (https://man7.org/linux/man-pages/man3/qsort.3.html)
     if (reverse_sort) {
         for (int i = 0; i < file_count / 2; i++) {
             FileEntry temp = files[i];
@@ -89,15 +89,16 @@ void traverse(const char *dir_name, int depth, int show_size, off_t min_size, co
     for (int i = 0; i < file_count; i++) {
         snprintf(path, sizeof(path), "%s/%s", dir_name, files[i].name);
         lstat(path, &file_stat); // Get file status
-        print_file_info(files[i].name, &file_stat, show_size);
-        printf("\n");
+
+        // Print file info with indentation
+        print_file_info(files[i].name, &file_stat, show_size, depth + 1);
 
         // Recursively traverse directories
-        if (S_ISDIR(file_stat.st_mode)) {
+        if (S_ISDIR(file_stat.st_mode)) { // Check if the file is a directory (https://man7.org/linux/man-pages/man3/S_ISDIR.3.html)
             traverse(path, depth + 1, show_size, min_size, filter, reverse_sort);
         }
 
-        free(files[i].name); // Free allocated memory for file name
+        free(files[i].name); // Free allocated memory for file name (https://man7.org/linux/man-pages/man3/free.3.html)
     }
 }
 
@@ -108,13 +109,13 @@ int main(int argc, char **argv) {
     char *start_dir = "."; // Default to current directory
 
     int opt;
-    while ((opt = getopt(argc, argv, "Ss:f:r:")) != -1) {
+    while ((opt = getopt(argc, argv, "Ss:f:r:")) != -1) { // Get command-line options (https://man7.org/linux/man-pages/man3/getopt.3.html)
         switch (opt) {
             case 'S':
                 show_size = 1;
                 break;
             case 's':
-                min_size = atoi(optarg);
+                min_size = atoi(optarg); // Convert argument to integer (https://man7.org/linux/man-pages/man3/atoi.3.html)
                 break;
             case 'f':
                 filter = optarg;
