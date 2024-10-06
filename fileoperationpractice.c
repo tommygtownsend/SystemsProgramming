@@ -6,19 +6,19 @@ To compile: gcc -o traverse traverse.c
 To run: ./traverse [options] [directory]
 */
 
-
 #include <stdio.h>      // For printf and perror
 #include <stdlib.h>     // For malloc, free, atoi
 #include <string.h>     // For strdup and strstr
 #include <dirent.h>     // For opendir, readdir, closedir
 #include <sys/stat.h>   // For lstat and struct stat
 #include <getopt.h>     // For getopt
+#include <fcntl.h>
 
 #define MAX_FILES 1024
 
 typedef struct {
     char *name;
-    off_t size;
+    off_t size; 
 } FileEntry;
 
 // Function to print file information
@@ -39,7 +39,7 @@ int compare_files(const void *a, const void *b) {
 
 // Function to recursively traverse directories
 void traverse(const char *dir_name, int depth, int show_size, off_t min_size, const char *filter, int reverse_sort) {
-    DIR *dir = opendir(dir_name); // Open the directory (https://man7.org/linux/man-pages/man3/opendir.3.html)
+    DIR *dir = opendir(dir_name); // Open the directory
     if (!dir) {
         perror("opendir");
         return;
@@ -56,25 +56,25 @@ void traverse(const char *dir_name, int depth, int show_size, off_t min_size, co
     while ((entry = readdir(dir)) != NULL) {
         if (entry->d_name[0] == '.') continue; // Skip hidden files
 
-        snprintf(path, sizeof(path), "%s/%s", dir_name, entry->d_name); // Create full path (https://man7.org/linux/man-pages/man3/snprintf.3.html)
-        lstat(path, &file_stat); // Get file status (https://man7.org/linux/man-pages/man2/lstat.2.html)
+        snprintf(path, sizeof(path), "%s/%s", dir_name, entry->d_name); // Create full path
+        lstat(path, &file_stat); // Get file status
 
         // Check if it matches the filter
-        if (filter && strstr(entry->d_name, filter) == NULL) continue; // Check for substring (https://man7.org/linux/man-pages/man3/strstr.3.html)
+        if (filter && strstr(entry->d_name, filter) == NULL) continue; // Check for substring
 
         // Check size filtering
         if (file_stat.st_size < min_size) continue;
 
         // Add to files array
-        files[file_count].name = strdup(entry->d_name); // Duplicate the file name (https://man7.org/linux/man-pages/man3/strdup.3.html)
+        files[file_count].name = strdup(entry->d_name); // Duplicate the file name
         files[file_count].size = file_stat.st_size;
         file_count++;
     }
 
-    closedir(dir); // Close the directory (https://man7.org/linux/man-pages/man3/closedir.3.html)
+    closedir(dir); // Close the directory
 
     // Sort files
-    qsort(files, file_count, sizeof(FileEntry), compare_files); // Sort the files (https://man7.org/linux/man-pages/man3/qsort.3.html)
+    qsort(files, file_count, sizeof(FileEntry), compare_files);
     if (reverse_sort) {
         for (int i = 0; i < file_count / 2; i++) {
             FileEntry temp = files[i];
@@ -83,11 +83,12 @@ void traverse(const char *dir_name, int depth, int show_size, off_t min_size, co
         }
     }
 
-    // Print directory and files with indentation
+    // Print directory name with indentation
     printf("%*s%s:\n", depth * 4, "", dir_name); // Indentation based on depth
+
     for (int i = 0; i < file_count; i++) {
         snprintf(path, sizeof(path), "%s/%s", dir_name, files[i].name);
-        lstat(path, &file_stat); // Get file status (https://man7.org/linux/man-pages/man2/lstat.2.html)
+        lstat(path, &file_stat); // Get file status
         print_file_info(files[i].name, &file_stat, show_size);
         printf("\n");
 
@@ -96,7 +97,7 @@ void traverse(const char *dir_name, int depth, int show_size, off_t min_size, co
             traverse(path, depth + 1, show_size, min_size, filter, reverse_sort);
         }
 
-        free(files[i].name); // Free allocated memory for file name (https://man7.org/linux/man-pages/man3/free.3.html)
+        free(files[i].name); // Free allocated memory for file name
     }
 }
 
