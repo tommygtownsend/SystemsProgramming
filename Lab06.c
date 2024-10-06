@@ -87,7 +87,12 @@ int compareByHostName(const void *a, const void *b) {
     return strcmp(((struct listing*)a)->host_name, ((struct listing*)b)->host_name);
 }
 
-int compareByPrice(const void *a, const void *b)
+int compareByPrice(const void *a, const void *b){
+    float priceA = ((struct listing*)a)->price;
+    float priceB = ((struct listing*)b)->price;
+    return (priceA > priceB) - (priceA < priceB);
+}
+
 
 
 int main(){
