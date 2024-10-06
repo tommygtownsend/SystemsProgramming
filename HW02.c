@@ -116,10 +116,11 @@ void traverse(const char *dir_name, int depth, int show_size, off_t min_size, co
 
         // Recursively traverse directories
         if (S_ISDIR(file_stat.st_mode)) { // if the file is a directory (https://man7.org/linux/man-pages/man3/S_ISDIR.3.html)
-            traverse(path, depth + 1, show_size, min_size, filter, reverse_sort); //If its a directory, traverse again, yay recursion!
+            traverse(path, 
+        depth + 1, show_size, min_size, filter, reverse_sort); //If its a directory, traverse again, yay recursion!
         }
 
-        free(files[i].name); // Free allocated memory for file name (https://man7.org/linux/man-pages/man3/free.3.html)
+        free(files[i].name); // Free allocated memory or you'll have a bad time (https://man7.org/linux/man-pages/man3/free.3.html)
     }
 }
 
@@ -130,7 +131,8 @@ int main(int argc, char **argv) {
     char *start_dir = "."; // Default to current directory
 
     int opt;
-    while ((opt = getopt(argc, argv, "Ss:f:r")) != -1) { // Get command-line options (https://man7.org/linux/man-pages/man3/getopt.3.html)
+    while ((opt = getopt(argc, argv, "Ss:f:r")) != -1) { // Get command-line options (https://man7.org/linux/man-pages/man3/getopt.3.html) 
+    //understanding how get option works  was a challenge but I am excited to use it in the future!
         switch (opt) {
             case 'S':
                 show_size = 1;
@@ -145,13 +147,13 @@ int main(int argc, char **argv) {
                 reverse_sort = 1;
                 break;
             default:
-                fprintf(stderr, "Usage: %s [-S] [-s size] [-f pattern] [-r] [directory]\n", argv[0]);
+                fprintf(stderr, "Usage: %s [-S] [-s size] [-f pattern] [-r reverse] [directory]\n", argv[0]);
                 exit(EXIT_FAILURE);
         }
     }
 
     if (optind < argc) {
-        start_dir = argv[optind]; // Get directory if provided
+        start_dir = argv[optind]; 
     }
 
     traverse(start_dir, 0, show_size, min_size, filter, reverse_sort);
