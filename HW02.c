@@ -18,7 +18,7 @@ To run: ./HW02 [options] [directory]
 
 #define MAX_FILES 1024  //Do we need to allow for more files? Like a gazillion?
 
-typedef struct {        //Struct for our name and off_t for the size of the file
+typedef struct {        //Struct to hold our name and off_t for the size of the file
     char *name;
     off_t size; 
 } FileEntry;
@@ -80,10 +80,10 @@ void traverse(const char *dir_name, int depth, int show_size, off_t min_size, co
         snprintf(path, sizeof(path), "%s/%s", dir_name, entry->d_name); // create our full path (https://man7.org/linux/man-pages/man3/snprintf.3.html)
         lstat(path, &file_stat); // Get file statuses when we need (https://man7.org/linux/man-pages/man2/lstat.2.html)
 
-        // Check if it matches the filter
+        // Check if it matches the filter or rather if filter is within the entry name
         if (filter && strstr(entry->d_name, filter) == NULL) continue; // Check for the enetered substring (https://man7.org/linux/man-pages/man3/strstr.3.html)
 
-        // Check size filtering
+        // Then we check size filtering
         if (file_stat.st_size < min_size) continue;
 
         // Add to files array we made earlier
@@ -102,22 +102,26 @@ void traverse(const char *dir_name, int depth, int show_size, off_t min_size, co
             files[i] = files[file_count - 1 - i];
             files[file_count - 1 - i] = temp;
         }
-    }//https://www.youtube.com/watch?v=aXXWXz5rF64 fun video with the sorting robot!
+    //********************************************************************************
+    //***************************important!*******************************************
+    }//https://www.youtube.com/watch?v=aXXWXz5rF64 fun video with the sorting robot!**
+    //I still need examples reduced down to this this level to really get concepts****
+     //*******************************************************************************
+     //*******************************************************************************
 
     // directory prints with depth times 4 indent
     printf("%*s%s:\n", depth * 4, "", dir_name); // Indentation based on depth
 
     for (int i = 0; i < file_count; i++) {
         snprintf(path, sizeof(path), "%s/%s", dir_name, files[i].name);
-        lstat(path, &file_stat); // Get the file stat
+        lstat(path, &file_stat); // Get the file stat struc
 
-        // Print file info with indentation
+        // Prints the file info with indentation
         print_file_info(files[i].name, &file_stat, show_size, depth + 1);
 
-        // Recursively traverse directories
+        // we recursively traverse our directories
         if (S_ISDIR(file_stat.st_mode)) { // if the file is a directory (https://man7.org/linux/man-pages/man3/S_ISDIR.3.html)
-            traverse(path, 
-        depth + 1, show_size, min_size, filter, reverse_sort); //If its a directory, traverse again, yay recursion!
+            traverse(path, depth + 1, show_size, min_size, filter, reverse_sort); //If its a directory, traverse again, yay recursion!
         }
 
         free(files[i].name); // Free allocated memory or you'll have a bad time (https://man7.org/linux/man-pages/man3/free.3.html)
@@ -125,10 +129,11 @@ void traverse(const char *dir_name, int depth, int show_size, off_t min_size, co
 }
 
 int main(int argc, char **argv) {
+    //ye old variables shoppe, get your finely crafted variables right here
     int show_size = 0, reverse_sort = 0;
     off_t min_size = 0;
     const char *filter = NULL;
-    char *start_dir = "."; // Default to current directory
+    char *start_dir = "."; // . is the current directory we are in
 
     int opt;
     while ((opt = getopt(argc, argv, "Ss:f:r")) != -1) { // Get command-line options (https://man7.org/linux/man-pages/man3/getopt.3.html) 
