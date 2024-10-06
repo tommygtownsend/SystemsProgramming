@@ -109,7 +109,7 @@ int main(int argc, char **argv) {
     char *start_dir = "."; // Default to current directory
 
     int opt;
-    while ((opt = getopt(argc, argv, "Ss:f:r:")) != -1) { // Get command-line options (https://man7.org/linux/man-pages/man3/getopt.3.html)
+    while ((opt = getopt(argc, argv, "Ss:f:r")) != -1) { // Get command-line options (https://man7.org/linux/man-pages/man3/getopt.3.html)
         switch (opt) {
             case 'S':
                 show_size = 1;
