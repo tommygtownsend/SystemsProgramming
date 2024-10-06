@@ -125,9 +125,9 @@ int main() {
     struct listing list_items[MAX_ITEMS];  // Array to hold the listings
     int count = 0;  // Counter for the number of items read
 
-    fptr = fopen("listings.csv", "r");  // Open the CSV file for reading
-    if (!fptr) {  // Check if the file opened successfully
-        perror("Error opening file");
+    fptr = fopen("listings.csv", "r");  // Open the CSV file for reading, slightly diffent because its using the memaddress instead of dereference
+    if (!fptr) {  // WE Check if the file opened successfully
+        perror("Error opening file");//https://man7.org/linux/man-pages/man3/perror.3.html
         return EXIT_FAILURE;  // Exit the program if there is an error
     }
 
@@ -149,7 +149,8 @@ int main() {
     }
 
     // Sort the listings by host_name
-    qsort(list_items, count, sizeof(struct listing), compareByHostName);
+    qsort(list_items, count, sizeof(struct listing), compareByHostName);//thanks to the standard library, we have a built in qsort! 
+    //https://man7.org/linux/man-pages/man3/qsort.3.html
     writeToFile("sorted_by_host_name.csv", list_items, count);  // Write sorted data to file
 
     // Sort the listings by price
