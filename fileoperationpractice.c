@@ -93,7 +93,7 @@ void traverse(const char *dir_name, int depth, int show_size, off_t min_size, co
             files[i] = files[file_count - 1 - i];
             files[file_count - 1 - i] = temp;
         }
-    }
+    }//https://www.youtube.com/watch?v=aXXWXz5rF64
 
     // Print directory name with indentation
     printf("%*s%s:\n", depth * 4, "", dir_name); // Indentation based on depth
