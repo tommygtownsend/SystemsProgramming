@@ -2,7 +2,7 @@
 Name: Tommy Townsend
 BlazerId: ttonwsend
 Project: HW02
-To compile: gcc -o traverse traverse.c
+To compile: gcc -o HW02 HW02.c
 To run: ./HW02 [options] [directory]
 */
 //I may have been a little overzealous with comments and man7 links. Going througth the things I do know,  
@@ -137,7 +137,7 @@ int main(int argc, char **argv) {
 
     int opt;
     while ((opt = getopt(argc, argv, "Ss:f:r")) != -1) { // Get command-line options (https://man7.org/linux/man-pages/man3/getopt.3.html) 
-    //understanding how get option works  was a challenge but I am excited to use it in the future!
+    //understanding how get option works was a challenge but I am excited to use it in the future!
         switch (opt) {
             case 'S':
                 show_size = 1;
