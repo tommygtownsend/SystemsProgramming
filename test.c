@@ -7,6 +7,11 @@
 #include <getopt.h>
 #include <fcntl.h>
 
+typedef struct {
+    char *name;
+    off_t size;
+} FileEntry;
+
 void traverse(const char *dir_name, int depth, int show_size, off_t min_size, const char *filter, int reverse_sort);
 
 void print_file_info(const char *file_name, struct stat *file_stat, int show_size) {
@@ -15,6 +20,16 @@ void print_file_info(const char *file_name, struct stat *file_stat, int show_siz
     } else {
         printf("%s", file_name);
     }
+}
+
+// Comparison function for sorting
+int compare_files(const void *a, const void *b) {
+    FileEntry *fileA = (FileEntry *)a;
+    FileEntry *fileB = (FileEntry *)b;
+
+    if (fileA->size < fileB->size) return -1;
+    if (fileA->size > fileB->size) return 1;
+    return 0;
 }
 
 void traverse(const char *dir_name, int depth, int show_size, off_t min_size, const char *filter, int reverse_sort) {
@@ -29,7 +44,7 @@ void traverse(const char *dir_name, int depth, int show_size, off_t min_size, co
     char path[1024];
 
     // Collect files in an array to sort them later if needed
-    char *files[1024];
+    FileEntry files[1024];
     int file_count = 0;
 
     while ((entry = readdir(dir)) != NULL) {
@@ -45,24 +60,32 @@ void traverse(const char *dir_name, int depth, int show_size, off_t min_size, co
         if (file_stat.st_size < min_size) continue;
 
         // Add to files array
-        files[file_count++] = strdup(entry->d_name);
+        files[file_count].name = strdup(entry->d_name);
+        files[file_count].size = file_stat.st_size;
+        file_count++;
     }
 
     closedir(dir);
 
-    // Sort files if needed
+    // Sort files
+    qsort(files, file_count, sizeof(FileEntry), compare_files);
     if (reverse_sort) {
-        // Implement sorting logic here
+        // Reverse the order of the sorted array
+        for (int i = 0; i < file_count / 2; i++) {
+            FileEntry temp = files[i];
+            files[i] = files[file_count - 1 - i];
+            files[file_count - 1 - i] = temp;
+        }
     }
 
     // Print directory and files
     printf("%*s%s:\n", depth * 4, "", dir_name); // Indentation based on depth
     for (int i = 0; i < file_count; i++) {
-        snprintf(path, sizeof(path), "%s/%s", dir_name, files[i]);
+        snprintf(path, sizeof(path), "%s/%s", dir_name, files[i].name);
         lstat(path, &file_stat);
-        print_file_info(files[i], &file_stat, show_size);
+        print_file_info(files[i].name, &file_stat, show_size);
         printf("\n");
-        free(files[i]); // Free allocated memory
+        free(files[i].name); // Free allocated memory for file name
     }
 }
 
