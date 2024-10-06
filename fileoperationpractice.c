@@ -49,7 +49,15 @@ int compare_files(const void *a, const void *b) {
     return (fileA->size - fileB->size);
 }
 
+
 // Function to recursively traverse directories
+// Parameters:
+// - dir_name: name of the directory we will traverse
+// - depth: Current depth level in the directory hierarchy (used for indentation)
+// - show_size: flag to indicate whether to show file sizes
+// - min_size: mim file size to display (files smaller than this are skipped)
+// - filter: Optional string to filter file names (only files containing this string will be shown)
+// - reverse_sort: Flag to indicate reversal
 void traverse(const char *dir_name, int depth, int show_size, off_t min_size, const char *filter, int reverse_sort) {
     DIR *dir = opendir(dir_name); // Open the directory (https://man7.org/linux/man-pages/man3/opendir.3.html)
     if (!dir) {
