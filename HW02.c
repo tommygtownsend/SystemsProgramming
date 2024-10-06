@@ -3,7 +3,7 @@ Name: Tommy Townsend
 BlazerId: ttonwsend
 Project: HW02
 To compile: gcc -o traverse traverse.c
-To run: ./traverse [options] [directory]
+To run: ./HW02 [options] [directory]
 */
 //I may have been a little overzealous with comments and man7 links. Going througth the things I do know,  
 //and going through the documentation, helps with learning the more difficult things availablbe to us in c I think
