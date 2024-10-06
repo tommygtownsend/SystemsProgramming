@@ -93,17 +93,63 @@ int compareByPrice(const void *a, const void *b){
     return (priceA > priceB) - (priceA < priceB);
 }
 
-
+void writeToFile(const char *filename, struct listing *list_items, int count) {
+    FILE *fptr = fopen(filename, "w");
+    if (!fptr) {
+        perror("Error opening file");
+        return;
+    }
+    for (int i = 0; i < count; i++) {
+        fprintf(fptr, "%d,%d,%s,%s,%s,%.6f,%.6f,%s,%.2f,%d,%d,%d,%d\n",
+                list_items[i].id, list_items[i].host_id, list_items[i].host_name,
+                list_items[i].neighbourhood_group, list_items[i].neighbourhood,
+                list_items[i].latitude, list_items[i].longitude,
+                list_items[i].room_type, list_items[i].price,
+                list_items[i].minimum_nights, list_items[i].number_of_reviews,
+                list_items[i].calculated_host_listings_count,
+                list_items[i].availability_365);
+    }
+    fclose(fptr);
+}
 
 int main(){
 
+     FILE *fptr;
+    char line[LINESIZE];
+    struct listing list_items[MAX_ITEMS];
+    int count = 0;
 
+    fptr = fopen("listings.csv", "r");
+    if (!fptr) {
+        perror("Error opening file");
+        return EXIT_FAILURE;
+    }
 
+    while (fgets(line, LINESIZE, fptr) != NULL) {
+        list_items[count++] = getfields(line);
+    }
+    fclose(fptr);
 
+    printf("Data read from listings.csv:\n");
+    for (int i = 0; i < count; i++) {
+        displayStruct(list_items[i]);
+    }
 
+    // Sort by host_name
+    qsort(list_items, count, sizeof(struct listing), compareByHostName);
+    writeToFile("sorted_by_host_name.csv", list_items, count);
 
+    // Sort by price
+    qsort(list_items, count, sizeof(struct listing), compareByPrice);
+    writeToFile("sorted_by_price.csv", list_items, count);
 
+    // Free allocated memory
+    for (int i = 0; i < count; i++) {
+        free(list_items[i].host_name);
+        free(list_items[i].neighbourhood_group);
+        free(list_items[i].neighbourhood);
+        free(list_items[i].room_type);
+    }
 
-
-
+    return 0;
 }
