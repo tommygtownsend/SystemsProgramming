@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
 #define LINESIZE 1024
 #define MAX_ITEMS 1000
 
@@ -21,9 +20,6 @@ struct listing {
     int calculated_host_listings_count;
     int availability_365;
 };
-
-
-
 
 struct listing getfields(char* line) {
     struct listing item;
@@ -82,12 +78,11 @@ void displayStruct(struct listing item) {
            item.calculated_host_listings_count, item.availability_365);
 }
 
-
 int compareByHostName(const void *a, const void *b) {
     return strcmp(((struct listing*)a)->host_name, ((struct listing*)b)->host_name);
 }
 
-int compareByPrice(const void *a, const void *b){
+int compareByPrice(const void *a, const void *b) {
     float priceA = ((struct listing*)a)->price;
     float priceB = ((struct listing*)b)->price;
     return (priceA > priceB) - (priceA < priceB);
@@ -112,9 +107,8 @@ void writeToFile(const char *filename, struct listing *list_items, int count) {
     fclose(fptr);
 }
 
-int main(){
-
-     FILE *fptr;
+int main() {
+    FILE *fptr;
     char line[LINESIZE];
     struct listing list_items[MAX_ITEMS];
     int count = 0;
@@ -126,6 +120,11 @@ int main(){
     }
 
     while (fgets(line, LINESIZE, fptr) != NULL) {
+        // Check if we are exceeding the maximum number of items
+        if (count >= MAX_ITEMS) {
+            fprintf(stderr, "Exceeded maximum items limit.\n");
+            break;
+        }
         list_items[count++] = getfields(line);
     }
     fclose(fptr);
