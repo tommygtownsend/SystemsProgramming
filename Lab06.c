@@ -20,7 +20,7 @@ struct listing {
     int number_of_reviews;
     int calculated_host_listings_count;
     int availability_365;
-}
+};
 
 
 
