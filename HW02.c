@@ -5,7 +5,7 @@ Project: HW02
 To compile: gcc -o HW02 HW02.c
 To run: ./HW02 [options] [directory]
 */
-//I may have been a little overzealous with comments and man7 links. Going througth the things I do know,  
+//I may have been a little overzealous with comments and man7 links. Going througth the things I do know well,  
 //and going through the documentation, helps with learning the more difficult things availablbe to us in c I think
 #include <stdio.h>      // For printf and perror
 #include <stdlib.h>     // For malloc, free, atoi
