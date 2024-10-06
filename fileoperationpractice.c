@@ -38,6 +38,11 @@ void print_file_info(const char *file_name, struct stat *file_stat, int show_siz
 }
 
 // Comparison function for sorting files by size
+// This function is used by qsort to determine the order of files
+// Parameters:
+// - a: Pointer to the first file entry
+// - b: Pointer to the second file entry
+// Returns: Negative value if a < b, zero if a == b, positive value if a > b
 int compare_files(const void *a, const void *b) {
     FileEntry *fileA = (FileEntry *)a;
     FileEntry *fileB = (FileEntry *)b;
