@@ -8,7 +8,7 @@ CFLAGS = -Wall -g
 TARGET = fileoperationpractice
 
 # Source files
-SRC = traverse.c arguments.c file_operations.c sort.c test.c fileoperationpractice.c
+SRC =  fileoperationpractice.c
 
 # Object files (generated from source files)
 OBJ = $(SRC:.c=.o)
