@@ -5,7 +5,7 @@ CC = gcc
 CFLAGS = -Wall -g
 
 # Target executable
-TARGET = traverse
+TARGET = fileoperationpractice
 
 # Source files
 SRC = traverse.c arguments.c file_operations.c sort.c test.c fileoperationpractice.c
