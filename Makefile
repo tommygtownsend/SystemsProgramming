@@ -1,16 +1,37 @@
-# Sample Makefile to compile C programs
+# Compiler
 CC = gcc
-CFLAGS = -Wall -g #replace -g with -O when not debugging
-DEPS = gettime.h Makefile
-OBJS = gettime.o insertionsort.o
-EXECS = insertionsort
 
+# Compiler flags
+CFLAGS = -Wall -g
 
-all: $(EXECS)
-%.o: %.c $(DEPS)
-$(CC) $(CFLAGS) -c -o $@ $<
-insertionsort: $(OBJS)
-$(CC) $(CFLAGS) -o $@ $^
+# Target executable
+TARGET = traverse
+
+# Source files
+SRC = traverse.c arguments.c file_operations.c sort.c test.c fileoperationpractice.c
+
+# Object files (generated from source files)
+OBJ = $(SRC:.c=.o)
+
+# Header files
+HEADERS = arguments.h file_operations.h sort.h
+
+# Default rule to build the executable
+$(TARGET): $(OBJ)
+	$(CC) $(CFLAGS) -o $(TARGET) $(OBJ)
+
+# Rule to compile .c files into .o files
+%.o: %.c $(HEADERS)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Clean up object files and the executable
 clean:
-/bin/rm -i *.o $(EXECS)
+	rm -f $(OBJ) $(TARGET)
+
+# Convenience rule to run the program
+run: $(TARGET)
+	./$(TARGET)
+
+# Phony targets
+.PHONY: clean run
 
