@@ -86,15 +86,15 @@ void traverse(const char *dir_name, int depth, int show_size, off_t min_size, co
         // Check size filtering
         if (file_stat.st_size < min_size) continue;
 
-        // Add to files array
-        files[file_count].name = strdup(entry->d_name); // Duplicate the file name (https://man7.org/linux/man-pages/man3/strdup.3.html)
+        // Add to files array we made earlier
+        files[file_count].name = strdup(entry->d_name); //(https://man7.org/linux/man-pages/man3/strdup.3.html)
         files[file_count].size = file_stat.st_size;
         file_count++;
     }
 
     closedir(dir); // Close the directory (https://man7.org/linux/man-pages/man3/closedir.3.html)
 
-    // Sort files
+    // Sort files using quicksort! Its one of my favorites and makes the most sense to me of all the N log N sorts we have seen
     qsort(files, file_count, sizeof(FileEntry), compare_files); // Sort the files (https://man7.org/linux/man-pages/man3/qsort.3.html)
     if (reverse_sort) {
         for (int i = 0; i < file_count / 2; i++) {
@@ -102,9 +102,9 @@ void traverse(const char *dir_name, int depth, int show_size, off_t min_size, co
             files[i] = files[file_count - 1 - i];
             files[file_count - 1 - i] = temp;
         }
-    }//https://www.youtube.com/watch?v=aXXWXz5rF64
+    }//https://www.youtube.com/watch?v=aXXWXz5rF64 fun video with the sorting robot!
 
-    // Print directory name with indentation
+    // directory prints with depth times 4 indent
     printf("%*s%s:\n", depth * 4, "", dir_name); // Indentation based on depth
 
     for (int i = 0; i < file_count; i++) {
