@@ -1,79 +1,105 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <dirent.h>
 #include <string.h>
+#include <dirent.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <getopt.h>
 #include <fcntl.h>
-#include <sys/types.h>
 
-typedef struct {
-    char *name;
-    off_t size;
-    int is_dir;
-} FileEntry;
+void traverse(const char *dir_name, int depth, int show_size, off_t min_size, const char *filter, int reverse_sort);
 
-FileEntry *file_entries = NULL;
-size_t file_count = 0;
-char *filter = NULL; // To store the filter string
+void print_file_info(const char *file_name, struct stat *file_stat, int show_size) {
+    if (show_size) {
+        printf("%s (%ld bytes)", file_name, file_stat->st_size);
+    } else {
+        printf("%s", file_name);
+    }
+}
 
-void travdir(const char *dirname) {
-    struct dirent *dirent;
-    DIR *parentDir = opendir(dirname);
-    if (parentDir == NULL) {
-        perror("Error opening directory");
+void traverse(const char *dir_name, int depth, int show_size, off_t min_size, const char *filter, int reverse_sort) {
+    DIR *dir = opendir(dir_name);
+    if (!dir) {
+        perror("opendir");
         return;
     }
+    
+    struct dirent *entry;
+    struct stat file_stat;
+    char path[1024];
 
-    while ((dirent = readdir(parentDir)) != NULL) {
-        if (strcmp(dirent->d_name, ".") != 0 && strcmp(dirent->d_name, "..") != 0) {
-            if (filter != NULL && strstr(dirent->d_name, filter) == NULL) {
-                continue; // Skip if the name does not contain the filter
-            }
+    // Collect files in an array to sort them later if needed
+    char *files[1024];
+    int file_count = 0;
 
-            char path[1024];
-            snprintf(path, sizeof(path), "%s/%s", dirname, dirent->d_name);
-            struct stat path_stat;
-            if (lstat(path, &path_stat) == -1) {
-                perror("Error getting file status");
-                continue;
-            }
+    while ((entry = readdir(dir)) != NULL) {
+        if (entry->d_name[0] == '.') continue; // Skip hidden files
 
-            file_entries = realloc(file_entries, sizeof(FileEntry) * (file_count + 1));
-            file_entries[file_count].name = strdup(dirent->d_name);
-            file_entries[file_count].size = path_stat.st_size;
-            file_entries[file_count].is_dir = S_ISDIR(path_stat.st_mode);
-            file_count++;
+        snprintf(path, sizeof(path), "%s/%s", dir_name, entry->d_name);
+        lstat(path, &file_stat);
+        
+        // Check if it matches the filter
+        if (filter && strstr(entry->d_name, filter) == NULL) continue;
+        
+        // Check size filtering
+        if (file_stat.st_size < min_size) continue;
 
-            if (file_entries[file_count - 1].is_dir) {
-                travdir(path);
-            }
-        }
+        // Add to files array
+        files[file_count++] = strdup(entry->d_name);
     }
-    closedir(parentDir);
+
+    closedir(dir);
+
+    // Sort files if needed
+    if (reverse_sort) {
+        // Implement sorting logic here
+    }
+
+    // Print directory and files
+    printf("%*s%s:\n", depth * 4, "", dir_name); // Indentation based on depth
+    for (int i = 0; i < file_count; i++) {
+        snprintf(path, sizeof(path), "%s/%s", dir_name, files[i]);
+        lstat(path, &file_stat);
+        print_file_info(files[i], &file_stat, show_size);
+        printf("\n");
+        free(files[i]); // Free allocated memory
+    }
 }
 
 int main(int argc, char **argv) {
-    // Command-line argument parsing
-    for (int i = 1; i < argc; i++) {
-        if (strcmp(argv[i], "-f") == 0) {
-            if (i + 1 < argc) {
-                filter = argv[i + 1]; // Set the filter string
-                i++; // Skip the next argument
-            }
-        } else {
-            // Assume it's a directory
-            const char *dirname = argv[i];
-            travdir(dirname);
+    int show_size = 0, reverse_sort = 0;
+    off_t min_size = 0;
+    const char *filter = NULL;
+    char *start_dir = "."; // Default to current directory
+
+    int opt;
+    while ((opt = getopt(argc, argv, "Ss:f:r:t:")) != -1) {
+        switch (opt) {
+            case 'S':
+                show_size = 1;
+                break;
+            case 's':
+                min_size = atoi(optarg);
+                break;
+            case 'f':
+                filter = optarg;
+                break;
+            case 'r':
+                reverse_sort = 1;
+                break;
+            case 't':
+                // Handle file or directory type filtering here
+                break;
+            default:
+                fprintf(stderr, "Usage: %s [-S] [-s size] [-f pattern] [-r] [directory]\n", argv[0]);
+                exit(EXIT_FAILURE);
         }
     }
-
-    // Output collected file entries
-    for (size_t i = 0; i < file_count; i++) {
-        printf("%s (%ld bytes)\n", file_entries[i].name, file_entries[i].size);
-        free(file_entries[i].name);
+    
+    if (optind < argc) {
+        start_dir = argv[optind]; // Get directory if provided
     }
-    free(file_entries);
-    return EXIT_SUCCESS;
 
+    traverse(start_dir, 0, show_size, min_size, filter, reverse_sort);
+    return 0;
 }
