@@ -7,14 +7,12 @@ To run: ./traverse [options] [directory]
 */
 
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <dirent.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <getopt.h>
-#include <fcntl.h>
+#include <stdio.h>      // For printf and perror
+#include <stdlib.h>     // For malloc, free, atoi
+#include <string.h>     // For strdup and strstr
+#include <dirent.h>     // For opendir, readdir, closedir
+#include <sys/stat.h>   // For lstat and struct stat
+#include <getopt.h>     // For getopt
 
 #define MAX_FILES 1024
 
