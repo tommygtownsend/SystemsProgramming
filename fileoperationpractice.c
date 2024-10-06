@@ -6,6 +6,7 @@ To compile: gcc -o traverse traverse.c
 To run: ./traverse [options] [directory]
 */
 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
