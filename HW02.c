@@ -16,7 +16,7 @@ To run: ./traverse [options] [directory]
 #include <fcntl.h>      // file control stuff, wouldnt let me use the off_t without
 
 
-#define MAX_FILES 1024  //Do we need to allow for more files? 
+#define MAX_FILES 1024  //Do we need to allow for more files? Like a gazillion?
 
 typedef struct {        //Struct for our name and off_t for the size of the file
     char *name;
