@@ -31,9 +31,9 @@ typedef struct {        //Struct for our name and off_t for the size of the file
 // - depth: The current depth in the directory tree for indentation
 void print_file_info(const char *file_name, struct stat *file_stat, int show_size, int depth) {
     if (show_size) {
-        printf("%*s%s (%ld bytes)\n", depth * 4, "", file_name, file_stat->st_size);
+        printf("%*s%s (%ld bytes)\n", depth * 4, "", file_name, file_stat->st_size);// If show_size is set, print the file name and its size
     } else {
-        printf("%*s%s\n", depth * 4, "", file_name);
+        printf("%*s%s\n", depth * 4, "", file_name);//If not just print the file name
     }
 }
 
