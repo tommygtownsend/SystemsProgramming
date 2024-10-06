@@ -109,14 +109,14 @@ void traverse(const char *dir_name, int depth, int show_size, off_t min_size, co
 
     for (int i = 0; i < file_count; i++) {
         snprintf(path, sizeof(path), "%s/%s", dir_name, files[i].name);
-        lstat(path, &file_stat); // Get file status
+        lstat(path, &file_stat); // Get the file stat
 
         // Print file info with indentation
         print_file_info(files[i].name, &file_stat, show_size, depth + 1);
 
         // Recursively traverse directories
-        if (S_ISDIR(file_stat.st_mode)) { // Check if the file is a directory (https://man7.org/linux/man-pages/man3/S_ISDIR.3.html)
-            traverse(path, depth + 1, show_size, min_size, filter, reverse_sort);
+        if (S_ISDIR(file_stat.st_mode)) { // if the file is a directory (https://man7.org/linux/man-pages/man3/S_ISDIR.3.html)
+            traverse(path, depth + 1, show_size, min_size, filter, reverse_sort); //If its a directory, traverse again, yay recursion!
         }
 
         free(files[i].name); // Free allocated memory for file name (https://man7.org/linux/man-pages/man3/free.3.html)
