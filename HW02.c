@@ -70,7 +70,7 @@ void traverse(const char *dir_name, int depth, int show_size, off_t min_size, co
     struct stat file_stat; // File status structure (https://man7.org/linux/man-pages/man2/stat.2.html)
     char path[1024]; // Buffer for full path
 
-    // Collect files in an array to sort them later if needed
+    // array to sort them later if needed
     FileEntry files[MAX_FILES];
     int file_count = 0;
 
