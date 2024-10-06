@@ -75,13 +75,13 @@ void traverse(const char *dir_name, int depth, int show_size, off_t min_size, co
     int file_count = 0;
 
     while ((entry = readdir(dir)) != NULL) { // Read directory entries (https://man7.org/linux/man-pages/man3/readdir.3.html)
-        if (entry->d_name[0] == '.') continue; // Skip hidden files
+        if (entry->d_name[0] == '.') continue; // Skip hidden files, this one allowed me to get rid of TONS of files I didnt want to see
 
-        snprintf(path, sizeof(path), "%s/%s", dir_name, entry->d_name); // Create full path (https://man7.org/linux/man-pages/man3/snprintf.3.html)
-        lstat(path, &file_stat); // Get file status (https://man7.org/linux/man-pages/man2/lstat.2.html)
+        snprintf(path, sizeof(path), "%s/%s", dir_name, entry->d_name); // create our full path (https://man7.org/linux/man-pages/man3/snprintf.3.html)
+        lstat(path, &file_stat); // Get file statuses when we need (https://man7.org/linux/man-pages/man2/lstat.2.html)
 
         // Check if it matches the filter
-        if (filter && strstr(entry->d_name, filter) == NULL) continue; // Check for substring (https://man7.org/linux/man-pages/man3/strstr.3.html)
+        if (filter && strstr(entry->d_name, filter) == NULL) continue; // Check for the enetered substring (https://man7.org/linux/man-pages/man3/strstr.3.html)
 
         // Check size filtering
         if (file_stat.st_size < min_size) continue;
