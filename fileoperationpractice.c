@@ -12,16 +12,23 @@ To run: ./traverse [options] [directory]
 #include <dirent.h>     // For opendir, readdir, closedir
 #include <sys/stat.h>   // For lstat and struct stat
 #include <getopt.h>     // For getopt
-#include <fcntl.h>
+#include <fcntl.h>      // file control stuff, wouldnt let me use the off_t without
 
-#define MAX_FILES 1024
 
-typedef struct {
+#define MAX_FILES 1024  //Do we need to allow for more files? 
+
+typedef struct {        //Struct for our name and off_t for the size of the file
     char *name;
     off_t size; 
 } FileEntry;
 
-// Function to print file information
+
+// Function to print information about a file
+// Parameters:
+// - file_name: The name of the file to print
+// - file_stat: A pointer to the struct that holds the file's statistics (size, etc.)
+// - show_size: Flag to determine whether to display the size of the file
+// - depth: The current depth in the directory tree for indentation
 void print_file_info(const char *file_name, struct stat *file_stat, int show_size, int depth) {
     if (show_size) {
         printf("%*s%s (%ld bytes)\n", depth * 4, "", file_name, file_stat->st_size);
