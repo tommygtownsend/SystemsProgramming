@@ -131,21 +131,21 @@ int main() {
         return EXIT_FAILURE;  // Exit the program if there is an error
     }
 
-    // Read each line from the file until the end
+    // Read each line from the file until you hit null
     while (fgets(line, LINESIZE, fptr) != NULL) {
         // Check if we are exceeding the maximum number of items
         if (count >= MAX_ITEMS) {
             fprintf(stderr, "Exceeded maximum items limit.\n");
             break;  // Stop reading if we hit the limit
         }
-        list_items[count++] = getfields(line);  // Parse the line and store the result
+        list_items[count++] = getfields(line);  // Go to the next space in the line and store the result
     }
-    fclose(fptr);  // Close the file after reading
+    fclose(fptr);  // close file after once you are done with it 
 
-    // Display all the read data
+    // Show all the data
     printf("Data read from listings.csv:\n");
     for (int i = 0; i < count; i++) {
-        displayStruct(list_items[i]);  // Call the display function for each item
+        displayStruct(list_items[i]);  // Call the display function for each item, like a toString in java
     }
 
     // Sort the listings by host_name
