@@ -64,7 +64,7 @@ int main(int argc, char *argv[]) {
 
                 // Get word count
                 int words = count_words(file_path);
-                if (words == -1) exit(EXIT_FAILURE; // Handle file read error
+                if (words == -1) exit(EXIT_FAILURE); // Handle file read error
 
                 // Print file details
                 printf("File: %s | Size: %ld bytes | Words: %d\n", entry->d_name, file_stat.st_size, words);
