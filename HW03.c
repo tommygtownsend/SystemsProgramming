@@ -10,6 +10,7 @@
 
 
 
+
 //This function counts how many words are in a file
 //Function: count_words 
 //In: pointer to a constant character, the filename
