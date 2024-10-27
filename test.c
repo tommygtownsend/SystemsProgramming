@@ -42,8 +42,15 @@ int main(int argc, char *argv[]) {
     }
 
     struct dirent *entry; // Structure to hold directory entries
+    struct stat file_stat; // Structure to hold file statistics
+
     while ((entry = readdir(dir)) != NULL) { // Read entries
-        if (entry->d_type == DT_REG) { // Only consider regular files
+        // Construct full path for stat
+        char file_path[1024];
+        snprintf(file_path, sizeof(file_path), "%s/%s", directory_name, entry->d_name);
+
+        // Use stat to check if it's a regular file
+        if (stat(file_path, &file_stat) == 0 && S_ISREG(file_stat.st_mode)) {
             pid_t pid = fork(); // Create a child process
             if (pid < 0) {
                 perror("Fork failed");
@@ -52,16 +59,6 @@ int main(int argc, char *argv[]) {
             }
 
             if (pid == 0) { // Child process
-                char file_path[1024];
-                snprintf(file_path, sizeof(file_path), "%s/%s", directory_name, entry->d_name); // Construct full file path
-
-                // Get file size using stat
-                struct stat file_stat;
-                if (stat(file_path, &file_stat) == -1) {
-                    perror("Error getting file stats");
-                    exit(EXIT_FAILURE);
-                }
-
                 // Get word count
                 int words = count_words(file_path);
                 if (words == -1) exit(EXIT_FAILURE); // Handle file read error
