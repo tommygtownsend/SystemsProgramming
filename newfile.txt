@@ -1,0 +1,4 @@
+uname -ttownsen
+/sbin/ifconfig
+/workspaces/SystemsProgramming/newfile 500
+/workspaces/SystemsProgramming/newfile 1000
