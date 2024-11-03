@@ -6,7 +6,7 @@
 #include <time.h>
 #include <string.h>
 
-// Function to split a string into an array of arguments
+
 void createarray(char *buf, char **array) {
     int i, count, len;
     len = strlen(buf);
@@ -20,97 +20,100 @@ void createarray(char *buf, char **array) {
     array[count] = (char *)NULL; // NULL-terminate the array
 }
 
-int main(int argc, char **argv) {
-    pid_t pid; // Variable to store process ID
-    int status; // Variable to store the exit status of the child process
-    char line[BUFSIZ], buf[BUFSIZ], *args[BUFSIZ]; // Buffers for input line, command, and arguments
-    time_t t1, t2; // Variables to store start and end time
 
-    // Check if the correct number of arguments is provided
+int main(int argc, char **argv) {
+    pid_t pid; 
+    int status; 
+    char line[BUFSIZ], buf[BUFSIZ], *args[BUFSIZ]; 
+    time_t t1, t2; // start and end time
+
+ 
     if (argc < 2) {
         printf("Usage: %s <commands file>\n", argv[0]);
         exit(-1);
     }
 
-    // Open the commands file for reading
+  
     FILE *fp1 = fopen(argv[1], "r");
     if (fp1 == NULL) {
         printf("Error opening file %s for reading\n", argv[1]);
         exit(-1);
     }
 
-    // Open a log file for writing output from the parent process
+
+
     FILE *fp2 = fopen("output.log", "w");
     if (fp2 == NULL) {
         printf("Error opening file output.log for writing\n");
         exit(-1);
     }
 
-    // Read commands line by line from the input file
+   
+   
     while (fgets(line, BUFSIZ, fp1) != NULL) {
-        strcpy(buf, line); // Save line read into buf
-        createarray(line, args); // Parse the line into arguments
+        strcpy(buf, line); // line we read read into the buffer
+        createarray(line, args); 
         
-        time(&t1); // Get the start time
-        pid = fork(); // Fork a new process
+        time(&t1); // starting time
+        pid = fork(); // we'll fork a new process
 
-        if (pid == 0) { // Child process
-            // Prepare filenames for stdout and stderr redirection
+        if (pid == 0) { // 0 means child process
+            // filenames for stdout and stderr redirection
             char outFile[BUFSIZ], errFile[BUFSIZ];
-            snprintf(outFile, sizeof(outFile), "%d.out", getpid()); // Create output filename
-            snprintf(errFile, sizeof(errFile), "%d.err", getpid()); // Create error filename
+            snprintf(outFile, sizeof(outFile), "%d.out", getpid()); // output filename
+            snprintf(errFile, sizeof(errFile), "%d.err", getpid()); // error filename
 
-            // Open output and error files
+            // open the output and error and exits upon failing
             FILE *out = fopen(outFile, "w");
             FILE *err = fopen(errFile, "w");
             if (out == NULL || err == NULL) {
                 perror("Error opening output or error file");
-                exit(EXIT_FAILURE); // Exit if file opening fails
+                exit(EXIT_FAILURE); 
             }
 
-            // Redirect stdout and stderr to the opened files
-            dup2(fileno(out), STDOUT_FILENO); // Redirect stdout to out file
-            dup2(fileno(err), STDERR_FILENO); // Redirect stderr to err file
+            // dup2 to redirect our file to std our or error https://man7.org/linux/man-pages/man2/dup.2.html
+            dup2(fileno(out), STDOUT_FILENO);  
+            dup2(fileno(err), STDERR_FILENO);  
 
-            // Close file pointers as they are no longer needed in the child
+            // the file pointers are no longer needed in the child so close 
             fclose(out);
             fclose(err);
 
-            // Execute the command using execvp
-            execvp(args[0], args); // Replace child process with the command
-            perror("exec"); // Only reached if exec fails
-            exit(-1); // Exit if exec fails
-        } else if (pid > 0) { // Parent process
-            printf("Child started at %s", ctime(&t1)); // Log child start time
-            printf("Wait for the child process to terminate\n");
-            wait(&status); // Wait for the child process to terminate
-            time(&t2); // Get the end time
-            printf("Child ended at %s", ctime(&t2)); // Log child end time
 
-            // Check if the child terminated normally
+
+            execvp(args[0], args); // child process is replaced with the command
+            perror("exec"); // if the exec fails
+            exit(-1); // we exit
+        } else if (pid > 0) { // if it is the parent process
+            printf("Child started at %s", ctime(&t1)); // log when the child starts
+            printf("Wait for the child process to terminate\n");
+            wait(&status); // wait for child to termingate
+            time(&t2); // end ing time
+            printf("Child ended at %s", ctime(&t2)); // log the time
+
+            // check if the child ended like it should have
             if (WIFEXITED(status)) { 
                 printf("Child process exited with status = %d\n", WEXITSTATUS(status)); // Log exit status
             } else { 
                 printf("Child process did not terminate normally!\n"); // Log abnormal termination
             }
 
-            // Prepare to log command execution time
-            buf[strlen(buf) - 1] = '\t'; // Replace \n with \t
-            strcat(buf, ctime(&t1)); // Append start time to command log
-            buf[strlen(buf) - 1] = '\t'; // Replace \n added by ctime with \t
-            strcat(buf, ctime(&t2)); // Append end time
-            fprintf(fp2, "%s", buf); // Write log to output.log
-            fflush(fp2); // Ensure all output is written
-        } else { // Fork error
-            perror("fork"); // Print error message
-            exit(EXIT_FAILURE); // Exit on fork failure
+            // log command execution time
+            buf[strlen(buf) - 1] = '\t'; // replace \n with \t
+            strcat(buf, ctime(&t1)); // write the start time to command log
+            buf[strlen(buf) - 1] = '\t'; // replace \n added by ctime with \t
+            strcat(buf, ctime(&t2)); // append to the end time
+            fprintf(fp2, "%s", buf); // write log to output.log
+            fflush(fp2); \
+        } else { // we get an error with the fork
+            perror("fork"); 
+            exit(EXIT_FAILURE); // exit on fork failure
         }
     }
 
-    // Close opened files
     fclose(fp1);
     fclose(fp2);
-    printf("[%ld]: Exiting main program .....\n", (long)getpid()); // Log exiting main program
-
-    return 0; // Exit program
+    printf("[%ld]: Exiting main program .....\n", (long)getpid()); 
+    
+    return 0; 
 }
