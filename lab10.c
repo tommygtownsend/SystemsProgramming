@@ -1,3 +1,6 @@
+//To Compile: gcc -Wall -o -O lab10 lab10.c
+//To Run:./lab10 file.txt
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
