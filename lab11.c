@@ -1,8 +1,14 @@
+//to compile: gcc -o lab11 lab11.c
+//to run: ./lab11
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#define MAX_CMD_LENGTH 1024
+// I think this has been the easiest one yet. I got it done fast enough that I 
+// kept second guessing myself as to if it is right or not. It can do everything
+// in the terminal similar to the example. It pipes using popen and pclose, 
+// has an infinite loop, to take care of the interface, and quits with 
+// "quit"
+#define MAX_CMD_LENGTH 1024 //we'll make it big enough to fit most any command
 
 int main(int argc, char **argv) {
     char command[MAX_CMD_LENGTH];
@@ -14,22 +20,21 @@ int main(int argc, char **argv) {
         
         printf("Enter command: ");
         
-        // read command
+        // read your command
         if (fgets(command, sizeof(command), stdin) == NULL) {
             perror("fgets");
             exit(EXIT_FAILURE);
         }
 
-        // Remove the newline character at the end of the command string
+        // remove the newline character at the end of the command string
         command[strcspn(command, "\n")] = '\0';
 
-        // Check if the user wants to quit
         if (strcmp(command, "quit") == 0) {
             printf("Exiting program...bye!\n");
             break;
         }
 
-        // Open a pipe and execute the command using popen
+        // open a pipe and execute the command with popen
         fp = popen(command, "r");
         if (fp == NULL) {
             perror("popen");
