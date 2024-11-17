@@ -1,3 +1,6 @@
+//to compile: gcc -o Lab12 100 4
+//to run: ./Lab12 <number to sum> <number of threads> ex. ./Lab12 100 4
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
@@ -8,11 +11,11 @@ pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 // struct with the necessary data
 typedef struct {
-    double *a;     // Pointer to the array of numbers
-    double sum;    // Partial sum computed by this thread
-    int N;         // Total number of elements
-    int size;      // Number of threads
-    long tid;      // Thread ID
+    double *a;     
+    double sum;    
+    int N;         
+    int size;      
+    long tid;      
 } ThreadData;
 
 // computes the sum of a portion of the array
