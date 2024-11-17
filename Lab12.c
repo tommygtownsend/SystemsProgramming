@@ -93,6 +93,5 @@ int main(int argc, char **argv) {
     free(tid);
     free(threadData);
     free(a);
-
     return 0;
 }
