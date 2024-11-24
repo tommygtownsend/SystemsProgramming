@@ -5,10 +5,10 @@ CC = gcc
 CFLAGS = -Wall -g
 
 # Target executable
-TARGET = HW03
+TARGET = HW04
 
 # Source files
-SRC =  HW03.c
+SRC =  HW04.c
 
 # Object files (generated from source files)
 OBJ = $(SRC:.c=.o)
