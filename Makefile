@@ -1,6 +1,6 @@
 # Compiler and flags
 CC = gcc
-CFLAGS = -Wall -pthread
+CFLAGS = -o -Wall -lpthread
 
 # Source and output files
 SRC = HW04.c
