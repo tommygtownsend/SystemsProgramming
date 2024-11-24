@@ -1,37 +1,32 @@
-# Compiler
+# Compiler and flags
 CC = gcc
+CFLAGS = -Wall -pthread
 
-# Compiler flags
-CFLAGS = -Wall -g -lpthread
+# Source and output files
+SRC = HW04.c
+OBJ = HW04.o
+EXEC = HW04
 
-# Target executable
-TARGET = HW04
+# Targets
 
-# Source files
-SRC =  HW04.c
+# Default target, builds the executable
+all: $(EXEC)
 
-# Object files (generated from source files)
-OBJ = $(SRC:.c=.o)
+# Rule to build the executable from object files
+$(EXEC): $(OBJ)
+	$(CC) $(OBJ) -o $(EXEC)
 
-# Header files
-HEADERS = arguments.h file_operations.h sort.h
+# Rule to compile source code into object file
+$(OBJ): $(SRC)
+	$(CC) $(CFLAGS) -c $(SRC)
 
-# Default rule to build the executable
-$(TARGET): $(OBJ)
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJ)
-
-# Rule to compile .c files into .o files
-%.o: %.c $(HEADERS)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-# Clean up object files and the executable
+# Clean up compiled files
 clean:
-	rm -f $(OBJ) $(TARGET)
+	rm -f $(OBJ) $(EXEC)
 
-# Convenience rule to run the program
-run: $(TARGET)
-	./$(TARGET)
+# Rebuild everything
+rebuild: clean all
 
-# Phony targets
-.PHONY: clean run
-
+# Target to run the program after compiling
+run: $(EXEC)
+	./$(EXEC)
