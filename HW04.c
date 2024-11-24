@@ -50,7 +50,7 @@ void *generate_random_numbers(void *arg) {
     return NULL;
 }
 
-// Child thread function to read from the pipe and compute sum
+// Child thread function to read from the pipe and compute the sum
 void *compute_sum(void *arg) {
     int *pipefd = ((ThreadData *)arg)->pipefd;
     int numbers[150];  // 150 numbers per thread
