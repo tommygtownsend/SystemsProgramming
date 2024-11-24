@@ -14,7 +14,7 @@ all: $(EXEC)
 
 # Rule to build the executable from object files
 $(EXEC): $(OBJ)
-	$(CC) $(OBJ) -o $(EXEC)
+	$(CC) $(OBJ) -o $(EXEC) -lpthread
 
 # Rule to compile source code into object file
 $(OBJ): $(SRC)

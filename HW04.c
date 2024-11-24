@@ -6,7 +6,6 @@
 #include <sys/wait.h>
 #include <time.h>
 
-// Constants
 #define NUM_RANDOM_NUMBERS 500    // Numbers per thread
 #define NUM_THREADS 3             // Number of threads created by the parent
 #define NUM_CHILD_THREADS 10      // Number of threads in the child process
