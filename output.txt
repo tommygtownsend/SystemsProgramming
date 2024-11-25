@@ -1,1 +1,1 @@
-Average sum: 75124.60
+Average sum: 74363.60
