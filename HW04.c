@@ -1,3 +1,11 @@
+/*
+Name: Tommy Townsend
+BlazerId: ttonwsend
+Project: HW04
+To compile: gcc -o HW02 HW02.c -lpthread or make
+To run: ./HW04 or make run
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
